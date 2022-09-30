@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>ZooShop</title>
+    {% endif %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-8">
+            <a href="{% url 'stock_list' %}">Главная страница</a>
+        </div>
+        <div class="col-md-4">
+            <form class="d-flex" action="#" method="get">
+                <input class="form-control me-2" type="search" name="q" placeholder="Поиск товара" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Найти</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <h4>Категории</h4>
+            {% for category in categories %}
+                <p><a href="#">{{ category.title }}</a> кол. товаров {{ category.cnt }}</p>
+            {% empty %}
+                <div class="alert alert-danger text-center" role="alert">
+                    Нет категорий для отображения
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-9">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "error" %}
+                        <br>
+                        <div class="alert alert-danger text-center" role="alert">
+                        {{ message }}
+                        </div>
+                    {% else %}
+                        <br>
+                        <div class="alert alert-{{ message.tags }} text-center" role="alert">
+                        {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock content %}
+<!----------------------------------------блок постраничной навигации-------------------------------------------------->
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">&laquo;</a>
+                    </li>
+                {% endif %}
+                <!--    если страниц больше чем 1, то блок навигации будет отображаться    -->
+                {% if page_obj.has_other_pages %}
+                    <!--    перебираем все страницы которые были получены из модели    -->
+                    {% for p in page_obj.paginator.page_range %}
+                        <!--    если страница из цикла совпала с текущей делаем ее активной    -->
+                        {% if page_obj.number == p %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ p }}</span>
+                            </li>
+                        <!--    добавляем к текущей страницы по 3 с обеих сторон если они есть    -->
+                        {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ q }}&page={{ p }}">{{ p }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+<!----------------------------------------конец блока постраничной навигации------------------------------------------->
+        </div>
+    </div>
+</div>
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
