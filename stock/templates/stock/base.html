@@ -13,9 +13,7 @@
 <body>
 <div class="container mt-2">
     <div class="row">
-        <div class="col-md-8">
-            <a href="{% url 'stock_list' %}">Главная страница</a>
-        </div>
+        <div class="col-md-8"><a href="{% url 'stock_list' %}" class="text-decoration-none">Главная страница</a></div>
         <div class="col-md-4">
             <form class="d-flex" action="#" method="get">
                 <input class="form-control me-2" type="search" name="q" placeholder="Поиск товара" aria-label="Search">
@@ -27,7 +25,7 @@
         <div class="col-md-3">
             <h4>Категории</h4>
             {% for category in categories %}
-                <p><a href="#">{{ category.title }}</a> кол. товаров {{ category.cnt }}</p>
+                <p><a href="{% url 'stock_category' category.slug %}">{{ category.title }}</a> кол. товаров {{ category.cnt }}</p>
             {% empty %}
                 <div class="alert alert-danger text-center" role="alert">
                     Нет категорий для отображения
@@ -51,7 +49,7 @@
                 {% endfor %}
             {% endif %}
             {% block content %}{% endblock content %}
-<!----------------------------------------блок постраничной навигации-------------------------------------------------->
+<!------------------------------------------start pagination block----------------------------------------------------->
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
@@ -81,7 +79,7 @@
                 </li>
                 {% endif %}
             </ul>
-<!----------------------------------------конец блока постраничной навигации------------------------------------------->
+<!-------------------------------------------end pagination block------------------------------------------------------>
         </div>
     </div>
 </div>

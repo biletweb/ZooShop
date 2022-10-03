@@ -1,7 +1,7 @@
 {% extends 'stock/base.html' %}
 {% load static %}
 {% block content %}
-    <h4>Список доступных товаров</h4>
+    <h4>Выбрана категория: {{ current_category_info.title|lower }}</h4>
     {% for products in stock %}
         <h5><a href="#">{{ products.title }}</a></h5>
         {% if products.image %}
@@ -20,8 +20,8 @@
             <p>Продажа: {{ products.sale_price }} грн</p>
         {% endif %}
     {% empty %}
-        <div class="alert alert-danger text-center" role="alert">
-            Нет товаров для отображения
+        <div class="alert alert-warning text-center" role="alert">
+            В этой категории нет доступных товаров для отображения
         </div>
     {% endfor %}
 {% endblock content %}
