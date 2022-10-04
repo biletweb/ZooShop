@@ -1,5 +1,5 @@
 from stock.models import Stock, Category
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 
@@ -14,7 +14,7 @@ class ProductList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
-        context['categories'] = Category.objects.annotate(cnt=Count("stock")).filter(cnt__gt=0)
+        context['categories'] = Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
         return context
 
     def get_queryset(self):
@@ -37,5 +37,20 @@ class CategoryDetail(ListView):
         return context
 
     def get_queryset(self):
-        category_id = get_object_or_404(Category, slug=self.kwargs['slug'])
-        return Stock.objects.filter(category=category_id.pk, availability=True)
+        category_get = get_object_or_404(Category, slug=self.kwargs['slug'])
+        return Stock.objects.filter(category=category_get.pk, availability=True)
+
+
+class ProductDetail(DetailView):
+    model = Stock  # model for work
+    template_name = 'stock/detail_product.html'  # default post_detail.html
+    context_object_name = 'product'  # default object
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Просмотр товара'
+        context['categories'] = Category.objects.annotate(cnt=Count("stock")).filter(cnt__gt=0)
+        return context
+
+    def get_queryset(self):
+        return Stock.objects.filter(availability=True)

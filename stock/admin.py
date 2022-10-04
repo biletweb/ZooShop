@@ -2,6 +2,9 @@ from django.contrib import admin
 from stock.models import Supplier, Category, Stock
 from django.utils.safestring import mark_safe
 
+admin.site.site_header = 'ZooShop'
+admin.site.index_title = 'Мой первый интернет магазин'
+
 
 """
 list_display - указываем поля модели которые будут отображаться в админке

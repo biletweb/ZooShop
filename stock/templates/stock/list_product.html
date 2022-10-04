@@ -3,7 +3,7 @@
 {% block content %}
     <h4>Список доступных товаров</h4>
     {% for products in stock %}
-        <h5><a href="#">{{ products.title }}</a></h5>
+        <h5><a href="{% url 'stock_detail' products.slug %}">{{ products.title }}</a></h5>
         {% if products.image %}
             <p><img src="{{ products.image.url }}" width="100"></p>
         {% else %}
@@ -15,7 +15,12 @@
                 Продажа: {{ products.sale_price }} грн |
                 Дата добавления: {{ products.added_at|date:'d E Y H:i' }}
             </p>
-            <p>{% if products.notes %} | Заметка: {{ products.notes }} {% endif %}</p>
+            {% if products.notes %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Заметка:</strong> {{ products.notes }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
         {% else %}
             <p>Продажа: {{ products.sale_price }} грн</p>
         {% endif %}
