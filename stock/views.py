@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 
 class ProductList(ListView):
     model = Stock  # model for work
-    template_name = 'stock/list_product.html'  # default sklad_list.html
-    context_object_name = 'stock'  # default objects_list
+    template_name = 'stock/list_product.html'  # default stock_list.html
+    context_object_name = 'stock'  # default object_list
     ordering = ['-added_at']
     paginate_by = 3  # number of posts per page
 
@@ -23,8 +23,8 @@ class ProductList(ListView):
 
 class CategoryDetail(ListView):
     model = Stock  # model for work
-    template_name = 'stock/category_product.html'  # default sklad_list.html
-    context_object_name = 'stock'  # default objects_list
+    template_name = 'stock/category_product.html'  # default stock_list.html
+    context_object_name = 'stock'  # default object_list
     ordering = ['-added_at']
     paginate_by = 3  # number of posts per page
 
@@ -43,7 +43,7 @@ class CategoryDetail(ListView):
 
 class ProductDetail(DetailView):
     model = Stock  # model for work
-    template_name = 'stock/detail_product.html'  # default post_detail.html
+    template_name = 'stock/detail_product.html'  # default stock_detail.html
     context_object_name = 'product'  # default object
 
     def get_context_data(self, **kwargs):
@@ -54,3 +54,21 @@ class ProductDetail(DetailView):
 
     def get_queryset(self):
         return Stock.objects.filter(availability=True)
+
+
+class SearchList(ListView):
+    model = Stock  # model for work
+    template_name = 'stock/search_products.html'  # default stock_list.html
+    context_object_name = 'search_products'  # default object_list
+    ordering = ['-added_at']
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Поиск товара'
+        context['q'] = self.request.GET.get('q')
+        context['categories'] = Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
+        return context
+
+    def get_queryset(self):
+        return Stock.objects.filter(title__icontains=self.request.GET.get('q'), availability=True)

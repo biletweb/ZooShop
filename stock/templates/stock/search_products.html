@@ -1,0 +1,32 @@
+{% extends 'stock/base.html' %}
+{% load static %}
+{% block content %}
+    <h4>Результаты поиска</h4>
+    {% for products in search_products %}
+        <h5><a href="{% url 'stock_detail' products.slug %}">{{ products.title }}</a></h5>
+        {% if products.image %}
+            <p><img src="{{ products.image.url }}" width="100"></p>
+        {% else %}
+            <p><img src="{% static 'img/no_image.png' %}" width="100"></p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <p>
+                Закупка: {{ products.purchase_price }} грн |
+                Продажа: {{ products.sale_price }} грн |
+                Дата добавления: {{ products.added_at|date:'d E Y H:i' }}
+            </p>
+            {% if products.notes %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Заметка:</strong> {{ products.notes }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% else %}
+            <p>Продажа: {{ products.sale_price }} грн</p>
+        {% endif %}
+    {% empty %}
+        <div class="alert alert-danger text-center" role="alert">
+            Нет товаров для отображения
+        </div>
+    {% endfor %}
+{% endblock content %}
