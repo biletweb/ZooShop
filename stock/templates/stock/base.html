@@ -16,7 +16,7 @@
         <div class="col-md-8"><a href="{% url 'stock_list' %}" class="text-decoration-none">Главная страница</a></div>
         <div class="col-md-4">
             <form class="d-flex" action="{% url 'stock_search' %}" method="get">
-                <input class="form-control me-2" type="search" name="q" placeholder="Поиск товара" aria-label="Search">
+                <input class="form-control me-2" type="search" name="q" required placeholder="Поиск товара" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Найти</button>
             </form>
         </div>
