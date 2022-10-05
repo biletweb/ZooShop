@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <h4>Список доступных товаров</h4>
-    {% for products in stock %}
+    {% for products in list_product %}
         <h5><a href="{% url 'stock_detail' products.slug %}">{{ products.title }}</a></h5>
         {% if products.image %}
             <p><img src="{{ products.image.url }}" width="100"></p>

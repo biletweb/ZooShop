@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 class ProductList(ListView):
     model = Stock  # model for work
     template_name = 'stock/list_product.html'  # default stock_list.html
-    context_object_name = 'stock'  # default object_list
+    context_object_name = 'list_product'  # default object_list
     ordering = ['-added_at']
     paginate_by = 3  # number of posts per page
 
@@ -24,7 +24,7 @@ class ProductList(ListView):
 class CategoryDetail(ListView):
     model = Stock  # model for work
     template_name = 'stock/category_product.html'  # default stock_list.html
-    context_object_name = 'stock'  # default object_list
+    context_object_name = 'category_product'  # default object_list
     ordering = ['-added_at']
     paginate_by = 3  # number of posts per page
 
@@ -44,7 +44,7 @@ class CategoryDetail(ListView):
 class ProductDetail(DetailView):
     model = Stock  # model for work
     template_name = 'stock/detail_product.html'  # default stock_detail.html
-    context_object_name = 'product'  # default object
+    context_object_name = 'detail_product'  # default object
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,8 +58,8 @@ class ProductDetail(DetailView):
 
 class SearchList(ListView):
     model = Stock  # model for work
-    template_name = 'stock/search_products.html'  # default stock_list.html
-    context_object_name = 'search_products'  # default object_list
+    template_name = 'stock/search_product.html'  # default stock_list.html
+    context_object_name = 'search_product'  # default object_list
     ordering = ['-added_at']
     paginate_by = 3
 

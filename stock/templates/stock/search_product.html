@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <h4>Результаты поиска</h4>
-    {% for products in search_products %}
+    {% for products in search_product %}
         <h5><a href="{% url 'stock_detail' products.slug %}">{{ products.title }}</a></h5>
         {% if products.image %}
             <p><img src="{{ products.image.url }}" width="100"></p>
