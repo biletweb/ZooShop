@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('stock.urls'), name='stock_home'),  # подключение приложения stock
+    path('', include('stock.urls'), name='stock_home'),  # подключаем приложение stock
+    path('users/', include('users.urls')),  # подключаем приложение users
 ]
 
 if settings.DEBUG:

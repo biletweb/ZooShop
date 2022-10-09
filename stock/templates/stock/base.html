@@ -13,7 +13,19 @@
 <body>
 <div class="container mt-2">
     <div class="row">
-        <div class="col-md-8"><a href="{% url 'stock_list' %}" class="text-decoration-none">Главная страница</a></div>
+        <div class="col-md-8">
+            <a href="{% url 'stock_list' %}" class="text-decoration-none">Главная страница</a> |
+<!-----------------------------------------start user app-------------------------------------------------------------->
+            {% if user.is_authenticated %}
+                {{ user.username }}, <a href="{% url 'logout' %}" class="text-decoration-none">выйти</a> |
+                <a href="{% url 'user_profile' %}" class="text-decoration-none">Профиль</a> |
+                <a href="/admin/" class="text-decoration-none">Админка</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-decoration-none">Войти</a> |
+                <a href="{% url 'register' %}" class="text-decoration-none">Регистрация</a>
+            {% endif %}
+<!------------------------------------------end user app--------------------------------------------------------------->
+        </div>
         <div class="col-md-4">
             <form class="d-flex" action="{% url 'stock_search' %}" method="get">
                 <input class="form-control me-2" type="search" name="q" required placeholder="Поиск товара" aria-label="Search">
@@ -53,7 +65,11 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">&laquo;</a>
+                        {% if q %}
+                            <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">&laquo;</a>
+                        {% else %}
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                        {% endif %}
                     </li>
                 {% endif %}
                 <!--    если страниц больше чем 1, то блок навигации будет отображаться    -->
@@ -68,14 +84,22 @@
                         <!--    добавляем к текущей страницы по 3 с обеих сторон если они есть    -->
                         {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
                             <li class="page-item">
-                                <a class="page-link" href="?q={{ q }}&page={{ p }}">{{ p }}</a>
+                                {% if q %}
+                                    <a class="page-link" href="?q={{ q }}&page={{ p }}">{{ p }}</a>
+                                {% else %}
+                                    <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                                {% endif %}
                             </li>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
                 {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">&raquo;</a>
+                    {% if q %}
+                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">&raquo;</a>
+                    {% else %}
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                    {% endif %}
                 </li>
                 {% endif %}
             </ul>

@@ -1,0 +1,20 @@
+{% extends 'stock/base.html' %}
+{% load static %}
+{% block content %}
+    <h4>Профиль пользователя: {{ user.userprofile }}</h4>
+    {% if user.is_authenticated %}
+        {% if user.userprofile.profile_pic %}
+            <p>Аватарка: <img src="{{ user.userprofile.profile_pic.url }}" width="100"></p>
+        {% else %}
+            <p><img src="{% static 'img/no_image.png' %}" width="100"></p>
+        {% endif %}
+        {% if user.userprofile.phone %}
+            <p>Телефон: {{ user.userprofile.phone }}</p>
+        {% endif %}
+        <p><a class="btn btn-primary" href="{% url 'user_profile_edit' %}" role="button">Редактировать</a></p>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            Для просмотра профиля пользователя нужно авторизоваться
+        </div>
+    {% endif %}
+{% endblock content %}

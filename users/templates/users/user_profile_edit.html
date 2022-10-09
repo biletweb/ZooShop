@@ -1,0 +1,28 @@
+{% extends 'stock/base.html' %}
+{% load static %}
+{% block content %}
+    <h4>Редактирование профиля: {{ user.userprofile }}</h4>
+    {% if user.is_authenticated %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="{{ p_form.phone.id_for_label }}">Номер телефона:</label>
+            {{ p_form.phone }}
+            {{ p_form.phone.errors }}
+            <br>
+            {% if user.userprofile.profile_pic.url != '' %}
+                <p><img src="{{ user.userprofile.profile_pic.url }}" width="100"> текущая аватарка</p>
+            {% else %}
+                <p><img src="{% static 'img/no_image.png' %}" width="100"> текущая аватарка</p>
+            {% endif %}
+            <label for="{{ p_form.profile_pic.id_for_label }}">Выбрать аватарку:</label>
+            {{ p_form.profile_pic }}
+            {{ p_form.profile_pic.errors }}
+            <br>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            Для просмотра профиля пользователя нужно авторизоваться
+        </div>
+    {% endif %}
+{% endblock content %}
