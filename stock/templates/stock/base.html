@@ -18,8 +18,10 @@
 <!-----------------------------------------start user app-------------------------------------------------------------->
             {% if user.is_authenticated %}
                 {{ user.username }}, <a href="{% url 'logout' %}" class="text-decoration-none">выйти</a> |
-                <a href="{% url 'user_profile' %}" class="text-decoration-none">Профиль</a> |
-                <a href="/admin/" class="text-decoration-none">Админка</a>
+                <a href="{% url 'user_profile' %}" class="text-decoration-none">Профиль</a>
+                {% if perms.stock %} <!-- checking if the logged-in user has any permissions in the application -->
+                    | <a href="/admin/" class="text-decoration-none">Админка</a>
+                {% endif %}
             {% else %}
                 <a href="{% url 'login' %}" class="text-decoration-none">Войти</a> |
                 <a href="{% url 'register' %}" class="text-decoration-none">Регистрация</a>
