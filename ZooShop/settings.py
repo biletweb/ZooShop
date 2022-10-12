@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'stock.apps.StockConfig',
     'users.apps.UsersConfig',
+    'comments.apps.CommentsConfig',
 ]
 
 MIDDLEWARE = [

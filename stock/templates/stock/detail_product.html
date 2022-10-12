@@ -20,6 +20,82 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
+<!------------------------------------------- start app comment ------------------------------------------------------->
+<!-- start modal add comment -->
+<div class="modal fade" id="add_comment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add_comment_label">Оставить комментарий</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+		<form method="post">
+			{% csrf_token %}
+            {{ form }}<br>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Оставить</button></form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal add comment -->
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_comment">Оставить комментарий</button>
+</div>
+<br>
+{% if comments %}
+    Комментариев: {{ comments.count }}<br><br>
+    {% for i in comments %}
+		{% if i.user.userprofile.profile_pic %}<img src="{{ i.user.userprofile.profile_pic.url }}" width="30">{% endif %}
+		<b>{{ i.user }}</b> {{ i.added_at|date:'d E Y H:i' }}<hr>{{ i.comment }}<br><br>
+			{% for reply in i.replies.all %}
+				<div class="container">
+					<div class="row">
+						<div class="col-md-11 offset-md-1">
+                            {% if reply.validation == True %}
+                                {% if reply.user.userprofile.profile_pic %}<img src="{{ reply.user.userprofile.profile_pic.url }}" width="30">{% endif %}
+                                <b>{{ reply.user|capfirst }}</b> {{ reply.added_at|date:'d E Y H:i' }}<br>{{ reply.comment }}
+                            {% else %}
+                                <i>Этот ответ на комментарий отключён модератором сайта</i>
+                            {% endif %}
+						</div>
+					</div>
+				</div>
+				<br>
+	{% endfor %}
+	<hr>
+	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+		<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#answer_comment{{ i.pk }}">Ответить</button>
+	</div><br>
+	<!-- start modal answer comment -->
+	<div class="modal fade" id="answer_comment{{ i.pk }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="">Добавить ответ</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		  </div>
+		  <div class="modal-body">
+			<form method="post" >
+				<input type="hidden" name="comment_id" value="{{ i.pk }}">
+				{% csrf_token %}
+				{{ form }}<br>
+		  </div>
+		  <div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Добавить</button>
+			</form>
+		  </div>
+		</div>
+	  </div>
+	</div>
+    <!-- end modal answer comment -->
+{% endfor %}
+{% else %}
+    Нет комментариев<br><br>
+{% endif %}
+<!------------------------------------------- end app comment---------------------------------------------------------->
         {% else %}
             <p>Продажа: {{ detail_product.sale_price }} грн</p>
             <div class="alert alert-warning text-center" role="alert">

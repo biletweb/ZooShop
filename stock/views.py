@@ -1,7 +1,13 @@
 from stock.models import Stock, Category
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+############################################ start app comments ########################################################
+from django.urls import reverse_lazy
+from comments.forms import CommentAddForm
+from comments.models import Comments
+from django.contrib import messages
+############################################# end app comments #########################################################
 
 
 class ProductList(ListView):
@@ -45,11 +51,34 @@ class ProductDetail(DetailView):
     model = Stock  # model for work
     template_name = 'stock/detail_product.html'  # default stock_detail.html
     context_object_name = 'detail_product'  # default object
+############################################ start app comments ########################################################
+    form = CommentAddForm
+
+    def post(self, request, **kwargs):
+        form = CommentAddForm(request.POST)
+        if form.is_valid():
+            title = self.get_object()
+            comment_id = request.POST.get('comment_id')
+            if comment_id:
+                comment_answer = Comments.objects.get(id=comment_id)
+            else:
+                comment_answer = None
+            form.instance.user = request.user
+            form.instance.title = title
+            form.instance.answer = comment_answer
+            form.save()
+            messages.success(request, 'Ваш комментарий/ответ был успешно добавлен')
+            return redirect(reverse_lazy('stock_detail', kwargs={'slug': title.slug}))
+############################################# end app comments #########################################################
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Просмотр товара'
         context['categories'] = Category.objects.annotate(cnt=Count("stock")).filter(cnt__gt=0)
+############################################ start app comments ########################################################
+        context['form'] = self.form
+        context['comments'] = Comments.objects.all().filter(title=self.object.pk, answer=None, validation=True)
+############################################# end app comments #########################################################
         return context
 
     def get_queryset(self):
