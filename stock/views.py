@@ -131,6 +131,6 @@ class SearchList(ListView):
 
     def get_queryset(self):
         if self.request.GET.get('q') == '':
-            return Stock.objects.filter(title__icontains='None', availability=True)
+            return Stock.objects.filter(title='None', availability=True)
         else:
             return Stock.objects.filter(title__icontains=self.request.GET.get('q'), availability=True)

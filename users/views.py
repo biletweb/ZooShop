@@ -31,7 +31,7 @@ def user_login(request):
             messages.success(request, f'Привет {user.username}, авторизация прошла успешно')
             return redirect('stock_list')
         else:
-            messages.error(request, 'Ошибка авторизации, введите правильные имя пользователя и пароль. Оба поля могут быть чувствительны к регистру')
+            messages.error(request, 'Ошибка авторизации, введите правильные имя пользователя и пароль')
             return redirect('stock_list')
     else:
         form = LoginForm()

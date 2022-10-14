@@ -18,10 +18,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-    '''
-    Проверяем загруженное фото, если размер по ширине или высоте более 300 пикселей перезаписываем в 300 на 300 пикселей
-    '''
     def save(self, **kwargs):
+        """
+        We check the uploaded photo, if the size in width or height is more than 300 pixels,
+        we rewrite it in 300 by 300 pixels
+        """
         if self.profile_pic:
             super().save(**kwargs)
             img = Image.open(self.profile_pic.path)
