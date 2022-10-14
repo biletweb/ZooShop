@@ -1,6 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 from PIL import Image
 
 
@@ -47,6 +48,10 @@ class Stock(models.Model):
     barcode = models.IntegerField(blank=True, default=0, db_index=True, verbose_name='Штрихкод')
     added_at = models.DateTimeField(auto_now_add=True, verbose_name='Добавлен')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Изменён')
+# start like, dislike ##################################################################################################
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    dislikes = models.ManyToManyField(User, related_name='dislikes', blank=True)
+# end like, dislike ####################################################################################################
 
     class Meta:
         verbose_name = 'Товар'

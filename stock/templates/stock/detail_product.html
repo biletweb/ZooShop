@@ -20,8 +20,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
-<!------------------------------------------- start app comment ------------------------------------------------------->
-<!-- start modal add comment -->
+<!-- start app comment ------------------------------------------------------------------------------------------------>
+<!-- start modal add comment ------------------------------------------------------------------------------------------>
 <div class="modal fade" id="add_comment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -40,8 +40,38 @@
     </div>
   </div>
 </div>
-<!-- end modal add comment -->
+<!-- end modal add comment -------------------------------------------------------------------------------------------->
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+<!-- start like, dislike ---------------------------------------------------------------------------------------------->
+    {% if not is_disliked %}
+    <form method="post">
+        {% csrf_token %}
+        {% if is_liked %}
+            <input hidden type="text" name="return_url" value="{{ request.path }}">
+            <input type="hidden" name="like" value="{{ detail_product.pk }}">
+            <b>{{ total_likes.count }}</b> <button type="submit" class="btn btn-success">Нравится</button>
+        {% else %}
+            <input hidden type="text" name="return_url" value="{{ request.path }}">
+            <input type="hidden" name="like" value="{{ detail_product.pk }}">
+            <button type="submit" class="btn btn-outline-success">Нравится</button>
+        {% endif %}
+    </form>
+    {% endif %}
+    {% if not is_liked %}
+    <form method="post">
+        {% csrf_token %}
+        {% if is_disliked %}
+            <input hidden type="text" name="return_url" value="{{ request.path }}">
+            <input type="hidden" name="dislike" value="{{ detail_product.pk }}">
+            <b>{{ total_dislikes.count }}</b> <button type="submit" class="btn btn-danger">Не нравится</button>
+        {% else %}
+            <input hidden type="text" name="return_url" value="{{ request.path }}">
+            <input type="hidden" name="dislike" value="{{ detail_product.pk }}">
+            <button type="submit" class="btn btn-outline-danger">Не нравится</button>
+        {% endif %}
+    </form>
+    {% endif %}
+<!-- end like, dislike ------------------------------------------------------------------------------------------------>
 	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_comment">Оставить комментарий</button>
 </div>
 <br>
@@ -69,7 +99,7 @@
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 		<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#answer_comment{{ i.pk }}">Ответить</button>
 	</div><br>
-	<!-- start modal answer comment -->
+<!-- start modal answer comment --------------------------------------------------------------------------------------->
 	<div class="modal fade" id="answer_comment{{ i.pk }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 		<div class="modal-content">
@@ -90,14 +120,14 @@
 		</div>
 	  </div>
 	</div>
-    <!-- end modal answer comment -->
+<!-- end modal answer comment ----------------------------------------------------------------------------------------->
 {% endfor %}
 {% else %}
     <div class="alert alert-warning text-center" role="alert">
         Нет комментариев
     </div>
 {% endif %}
-<!------------------------------------------- end app comment---------------------------------------------------------->
+<!-- end app comment -------------------------------------------------------------------------------------------------->
         {% else %}
             <p>Продажа: {{ detail_product.sale_price }} грн</p>
             <div class="alert alert-warning text-center" role="alert">

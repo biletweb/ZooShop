@@ -2,12 +2,10 @@ from stock.models import Stock, Category
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect
-############################################ start app comments ########################################################
 from django.urls import reverse_lazy
 from comments.forms import CommentAddForm
 from comments.models import Comments
 from django.contrib import messages
-############################################# end app comments #########################################################
 
 
 class ProductList(ListView):
@@ -51,10 +49,29 @@ class ProductDetail(DetailView):
     model = Stock  # model for work
     template_name = 'stock/detail_product.html'  # default stock_detail.html
     context_object_name = 'detail_product'  # default object
-############################################ start app comments ########################################################
+# start app comments ###################################################################################################
     form = CommentAddForm
 
     def post(self, request, **kwargs):
+# start like, dislike ##################################################################################################
+        like = request.POST.get('like')
+        dislike = request.POST.get('dislike')
+        return_url = request.POST.get('return_url')
+        if like:
+            product = Stock.objects.get(id=like)
+            if product.likes.filter(id=request.user.id):
+                product.likes.remove(request.user.id)
+            else:
+                product.likes.add(request.user.id)
+            return redirect(return_url)
+        if dislike:
+            product = Stock.objects.get(id=dislike)
+            if product.dislikes.filter(id=request.user.id):
+                product.dislikes.remove(request.user.id)
+            else:
+                product.dislikes.add(request.user.id)
+            return redirect(return_url)
+# end like, dislike ####################################################################################################
         form = CommentAddForm(request.POST)
         if form.is_valid():
             title = self.get_object()
@@ -69,16 +86,29 @@ class ProductDetail(DetailView):
             form.save()
             messages.success(request, 'Ваш комментарий/ответ был успешно добавлен')
             return redirect(reverse_lazy('stock_detail', kwargs={'slug': title.slug}))
-############################################# end app comments #########################################################
+# end app comments #####################################################################################################
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Просмотр товара'
         context['categories'] = Category.objects.annotate(cnt=Count("stock")).filter(cnt__gt=0)
-############################################ start app comments ########################################################
+# start app comments ###################################################################################################
         context['form'] = self.form
         context['comments'] = Comments.objects.all().filter(title=self.object.pk, answer=None, validation=True)
-############################################# end app comments #########################################################
+# end app comments #####################################################################################################
+# start like, dislike ##################################################################################################
+        product = Stock.objects.get(id=self.object.pk)
+        if product.likes.filter(id=self.request.user.id):
+            context['is_liked'] = True
+        else:
+            context['is_liked'] = False
+        if product.dislikes.filter(id=self.request.user.id):
+            context['is_disliked'] = True
+        else:
+            context['is_disliked'] = False
+        context['total_likes'] = product.likes.all()
+        context['total_dislikes'] = product.dislikes.all()
+# end like, dislike ####################################################################################################
         return context
 
     def get_queryset(self):
