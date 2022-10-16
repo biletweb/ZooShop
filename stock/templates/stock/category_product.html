@@ -1,5 +1,8 @@
 {% extends 'stock/base.html' %}
 {% load static %}
+<!-- start app cart --------------------------------------------------------------------------------------------------->
+{% load cart %}
+<!-- end app cart ----------------------------------------------------------------------------------------------------->
 {% block content %}
     <h4>Выбрана категория: {{ current_category_info.title|lower }}</h4>
     {% for products in category_product %}
@@ -14,6 +17,13 @@
                 Закупка: {{ products.purchase_price }} грн |
                 Продажа: {{ products.sale_price }} грн |
                 Дата добавления: {{ products.added_at|date:'d E Y H:i' }}
+<!-- start app cart --------------------------------------------------------------------------------------------------->
+            {% if products|is_in_cart:request.session.cart %}
+                <span class="badge bg-primary">
+                    В корзине
+                </span>
+            {% endif %}
+<!-- end app cart ----------------------------------------------------------------------------------------------------->
             </p>
             {% if products.notes %}
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">

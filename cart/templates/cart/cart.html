@@ -1,0 +1,46 @@
+{% extends 'stock/base.html' %}
+{% load static %}
+{% load cart %}
+{% block content %}
+    <h4>Корзина</h4>
+    {% if user.is_authenticated %}
+        <form action="{% url 'cart_add_remove' %}" method="post">
+        {% csrf_token %}
+        {% for product in prods %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="product_name" value="{{ product.title }}">
+            <input type="hidden" name="product_amount" value="{{ product|item_count:request.session.cart }}">
+            <input type="hidden" name="product_price_purchase" value="{{ product.purchase_price }}">
+            <input type="hidden" name="product_price_sale" value="{{ product.sale_price }}">
+            <input type="hidden" name="product_price" value="{{ product|price_total:request.session.cart }}">
+            <input type="hidden" name="product_profit" value="{{ product|profit:request.session.cart }}">
+            <input type="hidden" name="product_price_total" value="{{ prods|final_total:request.session.cart }}">
+            <input type="hidden" name="product_profit_total" value="{{ prods|final_profit:request.session.cart }}">
+            Товар: <a href="/product/{{ product.slug  }}/">{{ product.title  }}</a> |
+            Цена закупки: {{ product.purchase_price  }} грн |
+            Цена продажи: {{ product.sale_price  }} грн |
+            Кол: {{ product|item_count:request.session.cart }} шт/кг |
+            Итого: {{ product|price_total:request.session.cart }} грн |
+            Профит: {{ product|profit:request.session.cart }} грн
+            <br>
+            <a href="?delete={{ product.id }}">Удалить из корзины</a>
+            <br><br>
+        {% empty %}
+            <div class="alert alert-warning text-center" role="alert">
+                Корзина пустая
+            </div>
+        {% endfor %}
+        {% if prods %}
+            <b>Общая сумма: {{ prods|final_total:request.session.cart }} грн</b> <br>
+            <b>Общий профит: {{ prods|final_profit:request.session.cart }} грн</b>
+            <br><br>
+            <input type="hidden" name="phone" value="{{ user.userprofile.phone }}">
+            <button type="submit" class="btn btn-primary">Оформить</button>
+        {% endif %}
+        </form>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            Для просмотра содержимого корзины нужно авторизоваться
+        </div>
+    {% endif %}
+{% endblock content %}

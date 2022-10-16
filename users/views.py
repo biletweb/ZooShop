@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from users.forms import LoginForm, RegisterForm, ProfileUpdateForm
 from django.contrib import messages
 from django.db.models import Count
-from stock.models import Category
+from stock.models import Category, Stock
 
 
 def user_register(request):
@@ -47,7 +47,10 @@ def user_logout(request):
 def user_profile(request):
     context = {
         'title': 'Профиль пользователя',
-        'categories': Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
+        'categories': Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0),
+# start app cart #######################################################################################################
+        'cart_count': Stock.objects.filter(availability=True)
+# end app cart #########################################################################################################
     }
     return render(request, 'users/user_profile.html', context)
 
@@ -67,6 +70,9 @@ def user_profile_edit(request):
     context = {
         'p_form': p_form,
         'title': 'Редактирование профиля',
-        'categories': Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
+        'categories': Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0),
+# start app cart #######################################################################################################
+        'cart_count': Stock.objects.filter(availability=True)
+# end app cart #########################################################################################################
     }
     return render(request, 'users/user_profile_edit.html', context)

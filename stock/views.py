@@ -19,6 +19,9 @@ class ProductList(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
         context['categories'] = Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
+# start app cart #######################################################################################################
+        context['cart_count'] = Stock.objects.filter(availability=True)
+# end app cart #########################################################################################################
         return context
 
     def get_queryset(self):
@@ -38,6 +41,9 @@ class CategoryDetail(ListView):
         context['title'] = current_category_info.title
         context['categories'] = Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
         context['current_category_info'] = current_category_info
+# start app cart #######################################################################################################
+        context['cart_count'] = Stock.objects.filter(availability=True)
+# end app cart #########################################################################################################
         return context
 
     def get_queryset(self):
@@ -109,6 +115,9 @@ class ProductDetail(DetailView):
         context['total_likes'] = product.likes.all()
         context['total_dislikes'] = product.dislikes.all()
 # end like, dislike ####################################################################################################
+# start app cart #######################################################################################################
+        context['cart_count'] = Stock.objects.filter(availability=True)
+# end app cart #########################################################################################################
         return context
 
     def get_queryset(self):
@@ -127,6 +136,9 @@ class SearchList(ListView):
         context['title'] = 'Поиск товара'
         context['q'] = self.request.GET.get('q')
         context['categories'] = Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0)
+# start app cart #######################################################################################################
+        context['cart_count'] = Stock.objects.filter(availability=True)
+# end app cart #########################################################################################################
         return context
 
     def get_queryset(self):

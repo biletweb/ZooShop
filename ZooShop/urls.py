@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('stock.urls'), name='stock_home'),  # подключаем приложение stock
     path('users/', include('users.urls')),  # подключаем приложение users
+    path('cart/', include('cart.urls')),  # подключаем приложение cart
 ]
 
 if settings.DEBUG:
