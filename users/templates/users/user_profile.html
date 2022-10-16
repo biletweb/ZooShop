@@ -12,6 +12,27 @@
             <p>Телефон: {{ user.userprofile.phone }}</p>
         {% endif %}
         <p><a class="btn btn-primary" href="{% url 'user_profile_edit' %}" role="button">Редактировать</a></p>
+        {% if order %}
+            <table class="table caption-top">
+                <caption>Ваши заказы</caption>
+                    {% for i in order %}
+                        <thead>
+                            <tr>
+                                <th scope="col">Заказ №: {{ i.pk }}</th>
+                                <th scope="col">Ордер №: {{ i.order }} ({{ i.price_total }} грн)</th>
+                                <th scope="col">Дата заказа: {{ i.added_at|date:'d E Y H:i' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in i.orders.all %}
+                                <tr>
+                                    <td colspan="3">{{ q.product }}, {{ q.price }} грн, {{ q.amount }} шт</td>
+                                </tr>
+                            {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     {% else %}
         <div class="alert alert-warning text-center" role="alert">
             Для просмотра профиля пользователя нужно авторизоваться

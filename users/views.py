@@ -4,6 +4,7 @@ from users.forms import LoginForm, RegisterForm, ProfileUpdateForm
 from django.contrib import messages
 from django.db.models import Count
 from stock.models import Category, Stock
+from cart.models import Orders
 
 
 def user_register(request):
@@ -49,7 +50,8 @@ def user_profile(request):
         'title': 'Профиль пользователя',
         'categories': Category.objects.annotate(cnt=Count('stock')).filter(cnt__gt=0),
 # start app cart #######################################################################################################
-        'cart_count': Stock.objects.filter(availability=True)
+        'cart_count': Stock.objects.filter(availability=True),
+        'order': Orders.objects.all().filter(user=request.user.id)
 # end app cart #########################################################################################################
     }
     return render(request, 'users/user_profile.html', context)
