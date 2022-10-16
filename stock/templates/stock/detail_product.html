@@ -23,61 +23,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
-<!-- start app cart --------------------------------------------------------------------------------------------------->
-        {% if detail_product|is_in_cart:request.session.cart %}
-        <table>
-            <tr>
-                <td>
-                    <form action="{% url 'cart_add_remove' %}" method="POST">
-                        {% csrf_token %}
-                        <input hidden type="text" name="product" value="{{ detail_product.id }}">
-                        <input hidden type="text" name="remove" value="{{ detail_product.id }}">
-                        <!--запоминаем ссылку чтобы после обработчика вернуться на эту страницу-->
-                        <input hidden type="text" name="return_url" value="{{ request.path }}">
-                        <!--           end             -->
-                        {% comment %}
-                            раскомментировать для включения возможности указывать вес товара
-                            <input type="text" name="amount" value="0.01">
-                        {% endcomment %}
-                        <input type="submit" class="btn btn-primary" value="-">
-                    </form>
-                </td>
-                <td>
-                    {{ detail_product|item_count:request.session.cart }} в корзине
-                </td>
-                <td>
-                    <form action="{% url 'cart_add_remove' %}" method="POST">
-                        {% csrf_token %}
-                        <input hidden type="text" name="product" value="{{ detail_product.id }}">
-                        <!--запоминаем ссылку чтобы после обработчика вернуться на эту страницу-->
-                        <input hidden type="text" name="return_url" value="{{ request.path }}">
-                        <!--           end             -->
-                        {% comment %}
-                            раскомментировать для включения возможности указывать вес товара
-                            <input type="text" name="amount" value="0.01">
-                        {% endcomment %}
-                        <input type="submit" class="btn btn-primary" value="+">
-                    </form>
-                </td>
-            </tr>
-        </table>
-        <br>
-        {% else %}
-        <form action="{% url 'cart_add_remove' %}" method="POST">
-            {% csrf_token %}
-            <input hidden type="text" name="product" value="{{ detail_product.id }}">
-            <!--запоминаем ссылку чтобы после обработчика вернуться на эту страницу-->
-            <input hidden type="text" name="return_url" value="{{ request.path }}">
-            <!--           end             -->
-            {% comment %}
-                раскомментировать для включения возможности указывать вес товара
-                <input type="text" name="amount" value="0.01">
-            {% endcomment %}
-            <input type="submit" class="btn btn-primary" value="В корзину">
-        </form>
-        <br>
-        {% endif %}
-<!-- end app cart ----------------------------------------------------------------------------------------------------->
 <!-- start app comment ------------------------------------------------------------------------------------------------>
 <!-- start modal add comment ------------------------------------------------------------------------------------------>
 <div class="modal fade" id="add_comment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -101,6 +46,49 @@
 </div>
 <!-- end modal add comment -------------------------------------------------------------------------------------------->
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+<!-- start app cart --------------------------------------------------------------------------------------------------->
+        {% if detail_product|is_in_cart:request.session.cart %}
+                    <form action="{% url 'cart_add_remove' %}" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{ detail_product.id }}">
+                        <input hidden type="text" name="remove" value="{{ detail_product.id }}">
+                        <!--запоминаем ссылку чтобы после обработчика вернуться на эту страницу-->
+                        <input hidden type="text" name="return_url" value="{{ request.path }}">
+                        <!--           end             -->
+                        {% comment %}
+                            раскомментировать для включения возможности указывать вес товара
+                            <input type="text" name="amount" value="0.01">
+                        {% endcomment %}
+                        <input type="submit" class="btn btn-primary" value="-">
+                    </form>
+                    {{ detail_product|item_count:request.session.cart }} в корзине
+                    <form action="{% url 'cart_add_remove' %}" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{ detail_product.id }}">
+                        <!--запоминаем ссылку чтобы после обработчика вернуться на эту страницу-->
+                        <input hidden type="text" name="return_url" value="{{ request.path }}">
+                        <!--           end             -->
+                        {% comment %}
+                            раскомментировать для включения возможности указывать вес товара
+                            <input type="text" name="amount" value="0.01">
+                        {% endcomment %}
+                        <input type="submit" class="btn btn-primary" value="+">
+                    </form>
+        {% else %}
+        <form action="{% url 'cart_add_remove' %}" method="POST">
+            {% csrf_token %}
+            <input hidden type="text" name="product" value="{{ detail_product.id }}">
+            <!--запоминаем ссылку чтобы после обработчика вернуться на эту страницу-->
+            <input hidden type="text" name="return_url" value="{{ request.path }}">
+            <!--           end             -->
+            {% comment %}
+                раскомментировать для включения возможности указывать вес товара
+                <input type="text" name="amount" value="0.01">
+            {% endcomment %}
+            <input type="submit" class="btn btn-primary" value="В корзину">
+        </form>
+        {% endif %}
+<!-- end app cart ----------------------------------------------------------------------------------------------------->
 <!-- start like, dislike ---------------------------------------------------------------------------------------------->
     {% if not is_disliked %}
     <form method="post">

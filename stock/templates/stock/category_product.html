@@ -19,7 +19,7 @@
                 Дата добавления: {{ products.added_at|date:'d E Y H:i' }}
 <!-- start app cart --------------------------------------------------------------------------------------------------->
             {% if products|is_in_cart:request.session.cart %}
-                <span class="badge bg-primary">
+                | <span class="badge bg-primary">
                     В корзине
                 </span>
             {% endif %}
