@@ -72,7 +72,7 @@
                             раскомментировать для включения возможности указывать вес товара
                             <input type="text" name="amount" value="0.01">
                         {% endcomment %}
-                        <input type="submit" class="btn btn-primary" value="+">
+                        <input type="submit" class="btn btn-primary me-md-2" value="+">
                     </form>
         {% else %}
         <form action="{% url 'cart_add_remove' %}" method="POST">
@@ -85,7 +85,7 @@
                 раскомментировать для включения возможности указывать вес товара
                 <input type="text" name="amount" value="0.01">
             {% endcomment %}
-            <input type="submit" class="btn btn-primary" value="В корзину">
+            <input type="submit" class="btn btn-primary me-md-2" value="В корзину">
         </form>
         {% endif %}
 <!-- end app cart ----------------------------------------------------------------------------------------------------->
@@ -96,11 +96,11 @@
         {% if is_liked %}
             <input hidden type="text" name="return_url" value="{{ request.path }}">
             <input type="hidden" name="like" value="{{ detail_product.pk }}">
-            <b>{{ total_likes.count }}</b> <button type="submit" class="btn btn-success">Нравится</button>
+            <b>{{ total_likes.count }}</b> <button type="submit" class="btn btn-success me-md-2">Нравится</button>
         {% else %}
             <input hidden type="text" name="return_url" value="{{ request.path }}">
             <input type="hidden" name="like" value="{{ detail_product.pk }}">
-            <button type="submit" class="btn btn-outline-success">Нравится</button>
+            <button type="submit" class="btn btn-outline-success me-md-2">Нравится</button>
         {% endif %}
     </form>
     {% endif %}
@@ -110,11 +110,11 @@
         {% if is_disliked %}
             <input hidden type="text" name="return_url" value="{{ request.path }}">
             <input type="hidden" name="dislike" value="{{ detail_product.pk }}">
-            <b>{{ total_dislikes.count }}</b> <button type="submit" class="btn btn-danger">Не нравится</button>
+            <b>{{ total_dislikes.count }}</b> <button type="submit" class="btn btn-danger me-md-2">Не нравится</button>
         {% else %}
             <input hidden type="text" name="return_url" value="{{ request.path }}">
             <input type="hidden" name="dislike" value="{{ detail_product.pk }}">
-            <button type="submit" class="btn btn-outline-danger">Не нравится</button>
+            <button type="submit" class="btn btn-outline-danger me-md-2">Не нравится</button>
         {% endif %}
     </form>
     {% endif %}

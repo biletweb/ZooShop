@@ -16,14 +16,13 @@
             <input type="hidden" name="product_profit" value="{{ product|profit:request.session.cart }}">
             <input type="hidden" name="product_price_total" value="{{ prods|final_total:request.session.cart }}">
             <input type="hidden" name="product_profit_total" value="{{ prods|final_profit:request.session.cart }}">
-            Товар: <a href="/product/{{ product.slug  }}/">{{ product.title  }}</a> |
-            Цена закупки: {{ product.purchase_price  }} грн |
-            Цена продажи: {{ product.sale_price  }} грн |
-            Кол: {{ product|item_count:request.session.cart }} шт/кг |
-            Итого: {{ product|price_total:request.session.cart }} грн |
-            Профит: {{ product|profit:request.session.cart }} грн
-            <br>
-            <a href="?delete={{ product.id }}">Удалить из корзины</a>
+            <a href="/product/{{ product.slug  }}/">{{ product.title  }}</a>
+            | Цена закупки: {{ product.purchase_price  }} грн
+            | Цена продажи: {{ product.sale_price  }} грн
+            | Кол: {{ product|item_count:request.session.cart }} шт/кг
+            | Итого: {{ product|price_total:request.session.cart }} грн
+            | Профит: {{ product|profit:request.session.cart }} грн
+            | <a href="?delete={{ product.id }}">Удалить</a>
             <br><br>
         {% empty %}
             <div class="alert alert-warning text-center" role="alert">
@@ -31,11 +30,12 @@
             </div>
         {% endfor %}
         {% if prods %}
-            <b>Общая сумма: {{ prods|final_total:request.session.cart }} грн</b> <br>
-            <b>Общий профит: {{ prods|final_profit:request.session.cart }} грн</b>
-            <br><br>
+            <b>Общая сумма: {{ prods|final_total:request.session.cart }} грн</b><br>
+            <b>Общий профит: {{ prods|final_profit:request.session.cart }} грн</b><br>
             <input type="hidden" name="phone" value="{{ user.userprofile.phone }}">
-            <button type="submit" class="btn btn-primary">Оформить</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-primary">Оформить заказ</button>
+            </div>
         {% endif %}
         </form>
     {% else %}
