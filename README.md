@@ -1,2 +1,2 @@
 # online store in python
-This is my practical python course, everything that I learned from online courses is collected here, an online store is implemented with product categories, product details, user profiles, registration and authorization, shopping cart and checkout
+This is my hands-on Python course that contains everything I've learned from online courses. Implemented an online store with product categories, product details, product search, user profiles, user registration and authorization, product comments, product likes and dislikes, shopping cart and checkout. All this is implemented on the django framework.
