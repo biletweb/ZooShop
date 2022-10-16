@@ -1,1 +1,2 @@
-# python-project
+# online store in python
+This is my practical python course, everything that I learned from online courses is collected here, an online store is implemented with product categories, product details, user profiles, registration and authorization, shopping cart and checkout
